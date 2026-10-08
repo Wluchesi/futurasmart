@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnToggleStandard = document.getElementById('btnToggleStandard');
   const btnToggleCustom = document.getElementById('btnToggleCustom');
   const pricePlanSingle = document.getElementById('pricePlanSingle');
-  const mobileBarPrice = document.getElementById('mobileBarPrice');
   const singleZapLinks = document.querySelectorAll('.whatsapp-dynamic-link');
 
   function updateDesignVersion(customized) {
@@ -26,10 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (pricePlanSingle) {
       pricePlanSingle.textContent = singlePrice;
-    }
-
-    if (mobileBarPrice) {
-      mobileBarPrice.textContent = singlePrice;
     }
 
     // Mensagem dinâmica para WhatsApp (Plaquinha Individual)
@@ -89,16 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 5. Barra Fixa Mobile com Detecção de Scroll
-  const mobileStickyBar = document.getElementById('mobileStickyBar');
-  window.addEventListener('scroll', () => {
-    if (!mobileStickyBar) return;
-    if (window.scrollY > 320) {
-      mobileStickyBar.classList.add('visible');
-    } else {
-      mobileStickyBar.classList.remove('visible');
-    }
-  });
 
   // 6. MONTADOR DE PEDIDO INTERATIVO (ORDER BUILDER DINÂMICO)
   let qtyBlack = 1;

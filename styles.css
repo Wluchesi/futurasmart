@@ -1678,54 +1678,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 15px 35px -5px rgba(37, 211, 102, 0.8);
 }
 
-.mobile-sticky-bar {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(7, 9, 14, 0.95);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid var(--border-subtle);
-  padding: 0.75rem 1rem;
-  z-index: 998;
-  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.7);
-}
-
-.mobile-sticky-bar.visible {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.mobile-bar-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.mobile-bar-title {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.mobile-bar-price {
-  font-size: 1.25rem;
-  font-weight: 900;
-  color: var(--emerald-profit);
-}
-
-.mobile-bar-btn {
-  background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
-  color: #FFFFFF;
-  font-size: 0.88rem;
-  font-weight: 800;
-  padding: 0.7rem 1.2rem;
-  border-radius: var(--radius-full);
-}
-
 /* ==========================================================================
    MODAL DE CHECKOUT / PEDIDO EXPRESS
    ========================================================================== */
