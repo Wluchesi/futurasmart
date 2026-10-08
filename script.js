@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. MONTADOR DE PEDIDO INTERATIVO (ORDER BUILDER DINÂMICO)
   let qtyBlack = 1;
-  let qtyWhite = 0;
+  let qtyWhite = 1;
   let customLogoSelected = false;
 
   const btnMinusBlack = document.getElementById('btnMinusBlack');
