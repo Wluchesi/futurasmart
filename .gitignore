@@ -1,0 +1,17 @@
+# Dependencies & Environment
+node_modules/
+.env
+.env.local
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.vscode/
+.idea/
+
+# Backups and temporary folders
+Nova pasta/
+*.tmp
+*.log
