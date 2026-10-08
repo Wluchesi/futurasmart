@@ -59,6 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputClientName = document.getElementById('inputClientName');
   const inputClientPhone = document.getElementById('inputClientPhone');
 
+  const presetKit1 = document.getElementById('presetKit1');
+  const presetKit2 = document.getElementById('presetKit2');
+  const presetKit3 = document.getElementById('presetKit3');
+
   const summaryQtyText = document.getElementById('summaryQtyText');
   const summaryComboDiscountRow = document.getElementById('summaryComboDiscountRow');
   const summaryDiscountBadge = document.getElementById('summaryDiscountBadge');
@@ -130,6 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (summaryTotalVal) {
       summaryTotalVal.textContent = `R$ ${finalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
+
+    // Atualiza botões de atalho dos combos
+    if (presetKit1) presetKit1.classList.toggle('active', totalQty === 1);
+    if (presetKit2) presetKit2.classList.toggle('active', totalQty === 2);
+    if (presetKit3) presetKit3.classList.toggle('active', totalQty === 3);
   }
 
   // Controles de quantidade
@@ -243,48 +252,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Conectar botões dos kits para selecionar e rolar suavemente até o Montador
-  const kit1Btn = document.querySelector('.whatsapp-dynamic-link');
-  const kit2Btn = document.querySelector('.whatsapp-dynamic-link-kit2');
-  const kit3Btn = document.querySelector('.whatsapp-dynamic-link-kit3');
-  const orderBuilderAnchor = document.getElementById('montar-pedido');
-
-  function scrollToBuilder() {
-    if (orderBuilderAnchor) {
-      orderBuilderAnchor.scrollIntoView({ behavior: 'smooth' });
-      if (inputClientName) {
-        setTimeout(() => inputClientName.focus(), 600);
-      }
-    }
-  }
-
-  if (kit1Btn) {
-    kit1Btn.addEventListener('click', (e) => {
-      e.preventDefault();
+  // Atalhos de kits/combos
+  if (presetKit1) {
+    presetKit1.addEventListener('click', () => {
       qtyBlack = 1;
       qtyWhite = 0;
       calculateOrderSummary();
-      scrollToBuilder();
     });
   }
 
-  if (kit2Btn) {
-    kit2Btn.addEventListener('click', (e) => {
-      e.preventDefault();
+  if (presetKit2) {
+    presetKit2.addEventListener('click', () => {
       qtyBlack = 1;
       qtyWhite = 1;
       calculateOrderSummary();
-      scrollToBuilder();
     });
   }
 
-  if (kit3Btn) {
-    kit3Btn.addEventListener('click', (e) => {
-      e.preventDefault();
+  if (presetKit3) {
+    presetKit3.addEventListener('click', () => {
       qtyBlack = 2;
       qtyWhite = 1;
       calculateOrderSummary();
-      scrollToBuilder();
     });
   }
 
