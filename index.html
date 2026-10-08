@@ -520,14 +520,114 @@
 
         </div>
 
-        <!-- Personalização Opcional com Logotipo -->
-        <div class="logo-custom-card">
-          <div class="logo-custom-badge">🎨 Personalização Opcional</div>
-          <div class="logo-custom-body">
-            <h4 class="logo-custom-title">Quer suas plaquinhas com o Logotipo da sua empresa?</h4>
-            <p class="logo-custom-desc">
-              Fazemos a gravação profissional da sua marca nas plaquinhas por apenas <strong>+ R$ 30,00</strong> no valor total do pedido. Basta solicitar e nos enviar o arquivo da sua logo pelo WhatsApp ao pedir qualquer um dos kits acima!
+        <!-- Montador de Pedido Interativo & Personalizado -->
+        <div class="order-builder-box" id="montar-pedido">
+          <div class="builder-header">
+            <h3 class="builder-title">Monte Seu Pedido Personalizado</h3>
+            <p class="builder-subtitle">
+              Escolha a quantidade exata de cada modelo (Black ou White), informe seus dados e receba seu atendimento direto no WhatsApp com tudo calculado.
             </p>
+          </div>
+
+          <div class="builder-layout-grid">
+            <!-- Coluna 1: Escolha dos Modelos e Quantidades -->
+            <div>
+              <h4 class="builder-section-title">
+                <span>1. Escolha a quantidade de cada edição:</span>
+              </h4>
+
+              <div class="builder-models-list">
+                <!-- Modelo Black -->
+                <div class="builder-model-item selected" id="itemModelBlack">
+                  <div class="builder-model-info">
+                    <img src="assets/placa-black-pi102.png" alt="Edição Black" class="builder-model-thumb">
+                    <div>
+                      <div class="builder-model-name">Edição Black</div>
+                      <div class="builder-model-desc">Nobre, sofisticada e com estrelas douradas</div>
+                    </div>
+                  </div>
+                  <div class="builder-qty-control">
+                    <button type="button" class="builder-qty-btn" id="btnMinusBlack" title="Diminuir">-</button>
+                    <span class="builder-qty-val" id="displayQtyBlack">1</span>
+                    <button type="button" class="builder-qty-btn" id="btnPlusBlack" title="Aumentar">+</button>
+                  </div>
+                </div>
+
+                <!-- Modelo White -->
+                <div class="builder-model-item" id="itemModelWhite">
+                  <div class="builder-model-info">
+                    <img src="assets/placa-white-pi101.png" alt="Edição White" class="builder-model-thumb">
+                    <div>
+                      <div class="builder-model-name">Edição White</div>
+                      <div class="builder-model-desc">Clean, acetinada e ideal para clínicas e consultórios</div>
+                    </div>
+                  </div>
+                  <div class="builder-qty-control">
+                    <button type="button" class="builder-qty-btn" id="btnMinusWhite" title="Diminuir">-</button>
+                    <span class="builder-qty-val" id="displayQtyWhite">0</span>
+                    <button type="button" class="builder-qty-btn" id="btnPlusWhite" title="Aumentar">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Opção de Logo Personalizado -->
+              <label class="builder-logo-checkbox-card" for="checkCustomLogo">
+                <input type="checkbox" id="checkCustomLogo">
+                <div class="builder-logo-label">
+                  Quero personalizar com o meu Logotipo
+                  <div style="font-size: 0.78rem; color: var(--text-dim); font-weight: 500;">Adicionamos a sua logo gravada diretamente nas placas</div>
+                </div>
+                <span class="builder-logo-badge">+ R$ 30,00</span>
+              </label>
+            </div>
+
+            <!-- Coluna 2: Dados do Cliente & Resumo do Pedido -->
+            <div>
+              <h4 class="builder-section-title">
+                <span>2. Seus dados para o atendimento:</span>
+              </h4>
+
+              <div class="builder-client-card">
+                <div class="builder-field-group">
+                  <label class="builder-field-label" for="inputClientName">Seu Nome / Nome da Empresa:</label>
+                  <input type="text" id="inputClientName" class="builder-field-input" placeholder="Ex: Carlos (Barbearia VIP)" required>
+                </div>
+
+                <div class="builder-field-group">
+                  <label class="builder-field-label" for="inputClientPhone">Seu WhatsApp de Contato:</label>
+                  <input type="tel" id="inputClientPhone" class="builder-field-input" placeholder="Ex: (19)991623500" maxlength="13">
+                </div>
+
+                <!-- Resumo Dinâmico -->
+                <div class="builder-summary-card">
+                  <div class="builder-summary-row">
+                    <span>Total de Plaquinhas:</span>
+                    <strong id="summaryQtyText" style="color: var(--text-white);">1 unidade</strong>
+                  </div>
+                  <div class="builder-summary-row" id="summaryComboDiscountRow" style="display: none;">
+                    <span>Desconto Combo:</span>
+                    <span class="builder-combo-badge" id="summaryDiscountBadge">- R$ 20,80</span>
+                  </div>
+                  <div class="builder-summary-row" id="summaryLogoRow" style="display: none;">
+                    <span>Personalização de Logo:</span>
+                    <span style="color: var(--cyan-neon);">+ R$ 30,00</span>
+                  </div>
+                  <div class="builder-summary-row total-row">
+                    <span>Valor Total:</span>
+                    <span class="builder-summary-total" id="summaryTotalVal">R$ 79,90</span>
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--text-dim); text-align: center;">
+                    Pagamento único • Sem mensalidade • Enviada 100% configurada
+                  </div>
+                </div>
+
+                <!-- Botão Enviar para WhatsApp -->
+                <button type="button" class="btn-builder-whatsapp" id="btnSubmitBuilderOrder">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.12-.23-.19-.48-.31z"/></svg>
+                  <span>Pedir Plaquinha(s) no WhatsApp</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

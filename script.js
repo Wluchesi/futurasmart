@@ -1,9 +1,11 @@
 /**
  * Futura Avalia Smart — Scripts da Landing Page
- * Foco: Alta Performance, Usabilidade Fluida e Experiência Mobile Limpa
+ * Foco: Alta Performance, Usabilidade Fluida e Montador de Pedido Integrado ao WhatsApp
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const PHONE_NUMBER = '5519991623500';
+
   // 1. Interação com a Área de Vídeo Explicativo
   const videoPlayOverlay = document.getElementById('videoPlayOverlay');
   const heroVideoPlayer = document.getElementById('heroVideoPlayer');
@@ -31,16 +33,262 @@ document.addEventListener('DOMContentLoaded', () => {
 
     questionBtn.addEventListener('click', () => {
       const isAlreadyActive = item.classList.contains('active');
-      // Fecha outros itens para foco limpo
       faqItems.forEach(other => other.classList.remove('active'));
-      // Alterna item atual
       if (!isAlreadyActive) {
         item.classList.add('active');
       }
     });
   });
 
-  // 3. Galeria de Fotos Reais com Modal Lightbox
+  // 3. MONTADOR DE PEDIDO INTERATIVO (ORDER BUILDER DINÂMICO)
+  let qtyBlack = 1;
+  let qtyWhite = 0;
+  let customLogoSelected = false;
+
+  const btnMinusBlack = document.getElementById('btnMinusBlack');
+  const btnPlusBlack = document.getElementById('btnPlusBlack');
+  const displayQtyBlack = document.getElementById('displayQtyBlack');
+  const itemModelBlack = document.getElementById('itemModelBlack');
+
+  const btnMinusWhite = document.getElementById('btnMinusWhite');
+  const btnPlusWhite = document.getElementById('btnPlusWhite');
+  const displayQtyWhite = document.getElementById('displayQtyWhite');
+  const itemModelWhite = document.getElementById('itemModelWhite');
+
+  const checkCustomLogo = document.getElementById('checkCustomLogo');
+  const inputClientName = document.getElementById('inputClientName');
+  const inputClientPhone = document.getElementById('inputClientPhone');
+
+  const summaryQtyText = document.getElementById('summaryQtyText');
+  const summaryComboDiscountRow = document.getElementById('summaryComboDiscountRow');
+  const summaryDiscountBadge = document.getElementById('summaryDiscountBadge');
+  const summaryLogoRow = document.getElementById('summaryLogoRow');
+  const summaryTotalVal = document.getElementById('summaryTotalVal');
+  const btnSubmitBuilderOrder = document.getElementById('btnSubmitBuilderOrder');
+
+  function calculateOrderSummary() {
+    const totalQty = qtyBlack + qtyWhite;
+
+    if (displayQtyBlack) displayQtyBlack.textContent = qtyBlack;
+    if (displayQtyWhite) displayQtyWhite.textContent = qtyWhite;
+
+    if (itemModelBlack) itemModelBlack.classList.toggle('selected', qtyBlack > 0);
+    if (itemModelWhite) itemModelWhite.classList.toggle('selected', qtyWhite > 0);
+
+    // Texto de quantidade
+    if (summaryQtyText) {
+      if (totalQty === 0) {
+        summaryQtyText.textContent = 'Nenhuma plaquinha selecionada';
+      } else if (totalQty === 1) {
+        summaryQtyText.textContent = `1 unidade (${qtyBlack > 0 ? 'Edição Black' : 'Edição White'})`;
+      } else {
+        const parts = [];
+        if (qtyBlack > 0) parts.push(`${qtyBlack}x Black`);
+        if (qtyWhite > 0) parts.push(`${qtyWhite}x White`);
+        summaryQtyText.textContent = `${totalQty} unidades (${parts.join(', ')})`;
+      }
+    }
+
+    // Cálculo do valor base
+    let basePrice = 0;
+    let discount = 0;
+
+    if (totalQty === 0) {
+      basePrice = 0;
+    } else if (totalQty === 1) {
+      basePrice = 79.90;
+    } else if (totalQty === 2) {
+      basePrice = 139.00;
+      discount = (79.90 * 2) - 139.00; // Economia de R$ 20,80
+    } else if (totalQty === 3) {
+      basePrice = 189.00;
+      discount = (79.90 * 3) - 189.00; // Economia de R$ 50,70
+    } else {
+      // 4 ou mais unidades
+      basePrice = 189.00 + (totalQty - 3) * 55.00;
+      discount = (79.90 * totalQty) - basePrice;
+    }
+
+    // Logo adicional
+    const logoPrice = customLogoSelected ? 30.00 : 0.00;
+    const finalPrice = basePrice + logoPrice;
+
+    // Exibe ou oculta linhas de desconto e logo
+    if (summaryComboDiscountRow && summaryDiscountBadge) {
+      if (totalQty >= 2 && discount > 0) {
+        summaryComboDiscountRow.style.display = 'flex';
+        summaryDiscountBadge.textContent = `- R$ ${discount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      } else {
+        summaryComboDiscountRow.style.display = 'none';
+      }
+    }
+
+    if (summaryLogoRow) {
+      summaryLogoRow.style.display = customLogoSelected ? 'flex' : 'none';
+    }
+
+    if (summaryTotalVal) {
+      summaryTotalVal.textContent = `R$ ${finalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+  }
+
+  // Controles de quantidade
+  if (btnMinusBlack) {
+    btnMinusBlack.addEventListener('click', () => {
+      if (qtyBlack > 0) {
+        qtyBlack--;
+        calculateOrderSummary();
+      }
+    });
+  }
+  if (btnPlusBlack) {
+    btnPlusBlack.addEventListener('click', () => {
+      qtyBlack++;
+      calculateOrderSummary();
+    });
+  }
+
+  if (btnMinusWhite) {
+    btnMinusWhite.addEventListener('click', () => {
+      if (qtyWhite > 0) {
+        qtyWhite--;
+        calculateOrderSummary();
+      }
+    });
+  }
+  if (btnPlusWhite) {
+    btnPlusWhite.addEventListener('click', () => {
+      qtyWhite++;
+      calculateOrderSummary();
+    });
+  }
+
+  if (checkCustomLogo) {
+    checkCustomLogo.addEventListener('change', (e) => {
+      customLogoSelected = e.target.checked;
+      calculateOrderSummary();
+    });
+  }
+
+  // Máscara de entrada do telefone: (XX)XXXXXXXXX
+  if (inputClientPhone) {
+    inputClientPhone.addEventListener('input', (e) => {
+      let digits = e.target.value.replace(/\D/g, '');
+      if (digits.length > 11 && digits.startsWith('55')) {
+        digits = digits.slice(2);
+      }
+      digits = digits.slice(0, 11);
+
+      if (digits.length === 0) {
+        e.target.value = '';
+      } else if (digits.length <= 2) {
+        e.target.value = `(${digits}`;
+      } else {
+        e.target.value = `(${digits.slice(0, 2)})${digits.slice(2)}`;
+      }
+    });
+  }
+
+  // Envio do pedido montado para WhatsApp
+  if (btnSubmitBuilderOrder) {
+    btnSubmitBuilderOrder.addEventListener('click', () => {
+      const totalQty = qtyBlack + qtyWhite;
+
+      if (totalQty === 0) {
+        alert('Por favor, adicione pelo menos 1 plaquinha ao seu pedido.');
+        return;
+      }
+
+      const clientName = inputClientName && inputClientName.value.trim() 
+        ? inputClientName.value.trim() 
+        : '';
+
+      const clientPhone = inputClientPhone && inputClientPhone.value.trim() 
+        ? inputClientPhone.value.trim() 
+        : '';
+
+      if (!clientName) {
+        alert('Por favor, preencha o seu nome ou o nome da sua empresa para personalizarmos seu atendimento.');
+        if (inputClientName) inputClientName.focus();
+        return;
+      }
+
+      // Detalhes dos modelos escolhidos
+      const itemsList = [];
+      if (qtyBlack > 0) itemsList.push(`➡️ *${qtyBlack}x Edição Black*`);
+      if (qtyWhite > 0) itemsList.push(`➡️ *${qtyWhite}x Edição White*`);
+
+      const designType = customLogoSelected 
+        ? 'Personalizada com Meu Logotipo (+R$ 30,00)' 
+        : 'Arte Padrão Oficial do Google';
+
+      const totalValueFormatted = summaryTotalVal ? summaryTotalVal.textContent : 'R$ 79,90';
+
+      let zapMsg = `Olá! Meu nome é *${clientName}*`;
+      if (clientPhone) {
+        zapMsg += ` (WhatsApp: ${clientPhone})`;
+      }
+      zapMsg += `.\n\n`;
+      zapMsg += `Vim pelo site da Futura Avalia Smart e montei meu pedido:\n\n`;
+      zapMsg += `➡️ *Plaquinhas Selecionadas (${totalQty} un):*\n`;
+      zapMsg += `${itemsList.join('\n')}\n\n`;
+      zapMsg += `➡️ *Acabamento:* ${designType}\n\n`;
+      zapMsg += `➡️ *Valor Total Calculado:* ${totalValueFormatted}\n\n`;
+      zapMsg += `Gostaria de fechar o pedido!`;
+
+      const encodedZapMsg = encodeURIComponent(zapMsg);
+      const finalZapUrl = `https://api.whatsapp.com/send?phone=${PHONE_NUMBER}&text=${encodedZapMsg}`;
+
+      window.open(finalZapUrl, '_blank');
+    });
+  }
+
+  // Conectar botões dos kits para selecionar e rolar suavemente até o Montador
+  const kit1Btn = document.querySelector('.whatsapp-dynamic-link');
+  const kit2Btn = document.querySelector('.whatsapp-dynamic-link-kit2');
+  const kit3Btn = document.querySelector('.whatsapp-dynamic-link-kit3');
+  const orderBuilderAnchor = document.getElementById('montar-pedido');
+
+  function scrollToBuilder() {
+    if (orderBuilderAnchor) {
+      orderBuilderAnchor.scrollIntoView({ behavior: 'smooth' });
+      if (inputClientName) {
+        setTimeout(() => inputClientName.focus(), 600);
+      }
+    }
+  }
+
+  if (kit1Btn) {
+    kit1Btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      qtyBlack = 1;
+      qtyWhite = 0;
+      calculateOrderSummary();
+      scrollToBuilder();
+    });
+  }
+
+  if (kit2Btn) {
+    kit2Btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      qtyBlack = 1;
+      qtyWhite = 1;
+      calculateOrderSummary();
+      scrollToBuilder();
+    });
+  }
+
+  if (kit3Btn) {
+    kit3Btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      qtyBlack = 2;
+      qtyWhite = 1;
+      calculateOrderSummary();
+      scrollToBuilder();
+    });
+  }
+
+  // 4. Galeria de Fotos Reais com Lightbox Expansível
   const galleryItems = Array.from(document.querySelectorAll('.gallery-item-card'));
   const lightbox = document.getElementById('galleryLightbox');
   const lightboxImg = document.getElementById('lightboxImg');
@@ -101,4 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowLeft') prevLightbox();
     if (e.key === 'ArrowRight') nextLightbox();
   });
+
+  // Inicializa montador de pedidos
+  calculateOrderSummary();
 });
