@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 3. MONTADOR DE PEDIDO INTERATIVO (ORDER BUILDER DINÂMICO)
   let qtyBlack = 1;
   let qtyWhite = 1;
-  let customLogoSelected = false;
 
   const btnMinusBlack = document.getElementById('btnMinusBlack');
   const btnPlusBlack = document.getElementById('btnPlusBlack');
@@ -55,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const displayQtyWhite = document.getElementById('displayQtyWhite');
   const itemModelWhite = document.getElementById('itemModelWhite');
 
-  const checkCustomLogo = document.getElementById('checkCustomLogo');
   const inputClientName = document.getElementById('inputClientName');
   const inputClientPhone = document.getElementById('inputClientPhone');
 
@@ -66,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const summaryQtyText = document.getElementById('summaryQtyText');
   const summaryComboDiscountRow = document.getElementById('summaryComboDiscountRow');
   const summaryDiscountBadge = document.getElementById('summaryDiscountBadge');
-  const summaryLogoRow = document.getElementById('summaryLogoRow');
   const summaryTotalVal = document.getElementById('summaryTotalVal');
   const btnSubmitBuilderOrder = document.getElementById('btnSubmitBuilderOrder');
 
@@ -113,11 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
       discount = (79.90 * totalQty) - basePrice;
     }
 
-    // Logo adicional
-    const logoPrice = customLogoSelected ? 30.00 : 0.00;
-    const finalPrice = basePrice + logoPrice;
+    const finalPrice = basePrice;
 
-    // Exibe ou oculta linhas de desconto e logo
+    // Exibe ou oculta linhas de desconto
     if (summaryComboDiscountRow && summaryDiscountBadge) {
       if (totalQty >= 2 && discount > 0) {
         summaryComboDiscountRow.style.display = 'flex';
@@ -125,10 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         summaryComboDiscountRow.style.display = 'none';
       }
-    }
-
-    if (summaryLogoRow) {
-      summaryLogoRow.style.display = customLogoSelected ? 'flex' : 'none';
     }
 
     if (summaryTotalVal) {
@@ -172,12 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (checkCustomLogo) {
-    checkCustomLogo.addEventListener('change', (e) => {
-      customLogoSelected = e.target.checked;
-      calculateOrderSummary();
-    });
-  }
+
 
   // Máscara de entrada do telefone: (XX)XXXXXXXXX
   if (inputClientPhone) {
@@ -227,11 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (qtyBlack > 0) itemsList.push(`➡️ *${qtyBlack}x Edição Black*`);
       if (qtyWhite > 0) itemsList.push(`➡️ *${qtyWhite}x Edição White*`);
 
-      const designType = customLogoSelected 
-        ? 'Personalizada com Meu Logotipo (+R$ 30,00)' 
-        : 'Arte Padrão Oficial do Google';
-
-      const totalValueFormatted = summaryTotalVal ? summaryTotalVal.textContent : 'R$ 79,90';
+      const totalValueFormatted = summaryTotalVal ? summaryTotalVal.textContent : 'R$ 139,00';
 
       let zapMsg = `Olá! Meu nome é *${clientName}*`;
       if (clientPhone) {
@@ -241,7 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
       zapMsg += `Vim pelo site da Futura Avalia Smart e montei meu pedido:\n\n`;
       zapMsg += `➡️ *Plaquinhas Selecionadas (${totalQty} un):*\n`;
       zapMsg += `${itemsList.join('\n')}\n\n`;
-      zapMsg += `➡️ *Acabamento:* ${designType}\n\n`;
       zapMsg += `➡️ *Valor Total Calculado:* ${totalValueFormatted}\n\n`;
       zapMsg += `Gostaria de fechar o pedido!`;
 
